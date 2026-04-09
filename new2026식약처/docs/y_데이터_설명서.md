@@ -45,6 +45,13 @@
 
 ---
 
+```mermaid
+pie title 판정 결과 분포
+    "적합 75.23%" : 75.23
+    "상기실험확인함 23.88%" : 23.88
+    "부적합 0.89%" : 0.89
+```
+
 ### 3.2 `결과` (검출 여부)
 
 아플라톡신의 검출 여부를 구분하는 이진 변수이다.
@@ -57,6 +64,12 @@
 > **참고**: "수치"로 표기된 45,017건 중 실제 양성(기준 초과)은 `JDGMNT_WORD_NAME = 부적합`인 3,954건이다. 나머지는 검출되었으나 기준치 이내인 경우이다.
 
 ---
+
+```mermaid
+pie title 검출 여부 분포
+    "불검출 89.85%" : 89.85
+    "수치 검출 10.15%" : 10.15
+```
 
 ### 3.3 `결과값` (측정값)
 
@@ -119,13 +132,19 @@
 
 ## 5. 3개 타겟 변수 간 관계
 
-```
-JDGMNT_WORD_NAME     결과        결과값
-─────────────────────────────────────────
-적합 (75.23%)    →  불검출      → 0
-상기실험확인함    →  불검출/수치  → 0 또는 미량 수치
-  (23.88%)
-부적합 (0.89%)   →  수치        → 양성 수치 (기준 초과)
+```mermaid
+flowchart LR
+    A["적합 75.23%"] --> D["불검출"]
+    B["상기실험확인함 23.88%"] --> D
+    B --> E["수치"]
+    C["부적합 0.89%"] --> E
+    D --> G["결과값: 0"]
+    E --> H["미량 수치"]
+    E --> I["기준 초과 수치"]
+    style C fill:#e03131,color:#fff
+    style I fill:#e03131,color:#fff
+    style A fill:#2f9e44,color:#fff
+    style G fill:#2f9e44,color:#fff
 ```
 
 | JDGMNT_WORD_NAME | 결과=불검출 | 결과=수치 | 합계 |
@@ -138,6 +157,20 @@ JDGMNT_WORD_NAME     결과        결과값
 
 ---
 
+```mermaid
+flowchart LR
+    subgraph 적합부적합["적합/부적합 분류"]
+        A1["Negative 99.11%"] ~~~ A2["Positive 0.89%"]
+    end
+    subgraph 검출불검출["검출/불검출 분류"]
+        B1["Negative 89.85%"] ~~~ B2["Positive 10.15%"]
+    end
+    style A2 fill:#e03131,color:#fff
+    style B2 fill:#e8590c,color:#fff
+    style A1 fill:#2f9e44,color:#fff
+    style B1 fill:#2f9e44,color:#fff
+```
+
 ## 6. X 데이터와의 관계
 
 | 항목 | X | y |
@@ -147,6 +180,16 @@ JDGMNT_WORD_NAME     결과        결과값
 | 행 순서 정합 | 동일한 순서로 1:1 매핑 |
 
 X와 y는 같은 인덱스를 공유하며, 행 단위로 1:1 대응된다.
+
+```mermaid
+flowchart LR
+    A["X 데이터<br>443,824행 x 668열<br>독립변수"] --> C["1:1 매핑<br>동일 인덱스"]
+    B["y 데이터<br>443,824행 x 3열<br>종속변수"] --> C
+    C --> D["모델 학습"]
+    style A fill:#339af0,color:#fff
+    style B fill:#f06595,color:#fff
+    style D fill:#7950f2,color:#fff
+```
 
 ---
 
